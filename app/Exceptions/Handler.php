@@ -7,6 +7,20 @@ use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    public function render($request, Exception $exception)
+{
+    // This will replace our 404 response with
+    // a JSON response.
+    if ($exception instanceof ModelNotFoundException &&
+        $request->wantsJson())
+    {
+        return response()->json([
+            'data' => 'Resource not found'
+        ], 404);
+    }
+
+    return parent::render($request, $exception);
+}
     /**
      * A list of the exception types that are not reported.
      *
